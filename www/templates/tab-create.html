@@ -1,0 +1,49 @@
+
+<!--
+<ion-view view-title="Create Post">
+
+ 	<ion-content class="padding">
+		<div class="list">
+			<label class="item item-input">
+			    <input id="postTime" type="text" placeholder="Time:">
+			</label>
+			<label class="item item-input">
+			    <textarea id="postDesc" placeholder="Description"></textarea>
+			</label>
+
+			<button class="button button-block button-positive" ng-click="doCreateAction()">
+				<p>Post</p>
+			</button>
+		</div>
+ 	</ion-content>
+</ion-view>	
+-->
+<ion-view title="Create">
+    <ion-content padding="true" scroll="false" class="has-header">
+        <form>
+            <ion-list>
+                <label class="item item-input">
+                    <span class="input-label">Time</span>
+                    <input id="postTime" type="text" placeholder="Time"  ng-model="post.postTime">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Description</span>
+                    <input id="postDesc" type="text" placeholder="Description" ng-model="post.desc">
+                </label>
+
+                <!--
+                <label class="item item-input">
+                    <span class="input-label">Username</span>
+                    <input type="text" placeholder="email address" ng-model="creds.email">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Password</span>
+                    <input type="password"  ng-model="creds.password">
+                </label>
+            -->
+            </ion-list>
+            <button class="button button-stable button-block"
+                    ng-click="doCreateAction()">Post</button>
+        </form>
+    </ion-content>
+</ion-view>
