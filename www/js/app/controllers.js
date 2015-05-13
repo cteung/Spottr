@@ -39,30 +39,77 @@ angular.module('app.controllers', [])
             };
         }])
     .controller('HomeCtrl', [
-        '$state', '$scope', 'UserService',   // <-- controller dependencies
-        function ($state, $scope, UserService) {
+        '$state', '$scope', 'UserService', '$ionicModal', '$compile',   // <-- controller dependencies
+        function ($state, $scope, UserService, $ionicModal, $compile) {
 
-            post = Parse.Object.extend("Post");
-            var query = new Parse.Query(post);
-            query.find({
-                success:function(results) {
-                    console.dir(results);
-                    var s = "";
-                    for(var i=0, len=results.length; i<len; i++) {
-                        var post = results[i];
-                        s += "<p>";
-                        s += "<b>"+post.get("Time")+"</b><br/>";
-                        s += "<b>"+post.get("Description")+"</b><br/>";
-                        s += "<b>Written "+post.createdAt + "<br/>";
-                        s += "</p>";
+
+            var posts = angular.element( document.querySelector('#posts') );
+
+            refresh();
+        
+            function refresh(){
+
+                post = Parse.Object.extend("Post");
+                var query = new Parse.Query(post);
+
+                query.find({
+                    success:function(results) {
+                        posts.empty();
+                        console.dir(results);
+                        for(var i=0, len=results.length; i<len; i++) {
+                            var s = "";
+                            var post = results[i];
+                            s += "<div ng-click=openModal1(sswVJGhB0M)>";
+                            s += "<p>";
+                            s += "<b>"+post.id+"</b><br/>";
+                            s += "<b>"+post.get("Time")+"</b><br/>";
+                            s += "<b>"+post.get("Description")+"</b><br/>";
+                            s += "<b>Written "+post.createdAt + "<br/>";
+                            s += "</p>";
+                            s += "</div>";
+                            posts.append($compile(s)($scope));
+                        }
+
+                    },
+                    error:function(error) {
+                        alert("Error when getting posts!");
                     }
-                    $scope.home = post.get("Time");
-                    //angular.element("#posts").html(s);
-                },
-                error:function(error) {
-                    alert("Error when getting posts!");
-                }
-            });
+                });
+
+            };
+            
+            $scope.doRefreshAction = function() {
+                refresh();
+            };
+
+            $scope.contact = {
+                name: 'Mittens Cat',
+                info: 'Tap anywhere on the card to open the modal'
+              }
+
+              $ionicModal.fromTemplateUrl('contact-modal.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+              }).then(function(modal) {
+                $scope.modal = modal
+              })  
+
+              $scope.openModal = function() {
+                $scope.modal.show()
+              }
+
+              $scope.openModal1 = function(postid) {
+                alert(postid);
+                $scope.modal.show()
+              }
+
+              $scope.closeModal = function() {
+                $scope.modal.hide();
+              };
+
+              $scope.$on('$destroy', function() {
+                $scope.modal.remove();
+              });
 
         }])
     .controller('AccountCtrl', [
