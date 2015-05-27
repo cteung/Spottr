@@ -122,7 +122,7 @@ angular.module('starter',
                 views: {
                     'tab-profile': {
                         templateUrl: 'templates/tab-profile.html',
-                        //controller: 'HomeCtrl'
+                        controller: 'ProfileCtrl'
                     }
                 }
             });

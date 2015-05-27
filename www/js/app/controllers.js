@@ -38,6 +38,17 @@ angular.module('app.controllers', [])
                 UserService.createPost($scope.post);
             };
         }])
+    .controller('ProfileCtrl', [
+        '$state', '$scope', 'UserService',   // <-- controller dependencies
+        function ($state, $scope, UserService) {
+            
+            $scope.doLogoutAction = function() {
+                Parse.User.logOut();
+                $state.go('app-login', {
+                    clear: true
+                });
+            };
+        }])
     .controller('HomeCtrl', [
         '$state', '$scope', 'UserService', '$ionicModal', '$compile',   // <-- controller dependencies
         function ($state, $scope, UserService, $ionicModal, $compile) {

@@ -22,8 +22,10 @@
 </script>
 
 <ion-view title="Home">
+ 	<ion-nav-buttons side="right">
+        <button class="button" ng-click="doLogoutAction()" ng-click="doRefreshAction()">Refresh</button>
+    </ion-nav-buttons>
     <ion-content class="padding">
-    	<button class="button button-stable button-block" ng-click="doRefreshAction()">Refresh</button>
 
 		 <ion-list can-swipe="true">
             <ion-item class="item item-thumbnail-left" ng-repeat="data in postList" data=""type="item-text-wrap" ng-click="openModal1(data)">
