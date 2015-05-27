@@ -27,8 +27,20 @@
 <ion-view title="Home">
     <ion-content class="padding">
     	<button class="button button-stable button-block" ng-click="doRefreshAction()">Refresh</button>
-		<button class="button button-stable button-block" ng-click="openModal()">Modal</button>
+		<button class="button button-stable button-block" ng-click="openModal1(asdfr)">Modal</button>
 		<div ng-click="openModal()">MODAL</div>
+
+		 <ion-list can-swipe="true">
+            <ion-item class="item item-thumbnail-left" ng-repeat="data in postList" data=""type="item-text-wrap" ng-click="openModal1(data)">
+                <p>{{data.id}}</p>
+                <p>{{data.time}}</p>
+                <p>{{data.desc}}</p>
+                <ion-option-button class="button-assertive" ng-click="doDeleteRow(data.id)">
+                    DELETE
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+
     	<div id="posts" ng-bind-html="home"></div>
 
 

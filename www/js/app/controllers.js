@@ -44,6 +44,7 @@ angular.module('app.controllers', [])
 
 
             var posts = angular.element( document.querySelector('#posts') );
+            var postArray = [];
 
             refresh();
         
@@ -57,18 +58,22 @@ angular.module('app.controllers', [])
                         posts.empty();
                         console.dir(results);
                         for(var i=0, len=results.length; i<len; i++) {
-                            var s = "";
                             var post = results[i];
-                            s += "<div ng-click=openModal1(sswVJGhB0M)>";
-                            s += "<p>";
-                            s += "<b>"+post.id+"</b><br/>";
-                            s += "<b>"+post.get("Time")+"</b><br/>";
-                            s += "<b>"+post.get("Description")+"</b><br/>";
-                            s += "<b>Written "+post.createdAt + "<br/>";
-                            s += "</p>";
-                            s += "</div>";
-                            posts.append($compile(s)($scope));
+                            var id = post.id;
+                            var time = post.get('Time');
+                            var desc = post.get('Description');
+
+                            var json = {
+                                "id": id,
+                                "time": time,
+                                "desc": desc
+                            };
+
+                            postArray.push(json);
+
                         }
+
+                        $scope.postList = postArray;
 
                     },
                     error:function(error) {
@@ -82,34 +87,41 @@ angular.module('app.controllers', [])
                 refresh();
             };
 
-            $scope.contact = {
-                name: 'Mittens Cat',
-                info: 'Tap anywhere on the card to open the modal'
-              }
+            $scope.detailAction = function() {
+                refresh();
+            };
 
-              $ionicModal.fromTemplateUrl('contact-modal.html', {
+            $scope.contact = {
+                name: 'id',
+                info: 'Tap anywhere on the card to open the modal'
+            }
+
+            $ionicModal.fromTemplateUrl('contact-modal.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
-              }).then(function(modal) {
+                }).then(function(modal) {
                 $scope.modal = modal
-              })  
+            });  
 
-              $scope.openModal = function() {
+            $scope.openModal = function() {
+            $scope.modal.show()
+            };
+
+            $scope.openModal1 = function(x) {      
+
+                $scope.contact.name = x.id;
+                $scope.contact.info = x.desc;
+
                 $scope.modal.show()
-              }
+            };
 
-              $scope.openModal1 = function(postid) {
-                alert(postid);
-                $scope.modal.show()
-              }
+            $scope.closeModal = function() {
+            $scope.modal.hide();
+            };
 
-              $scope.closeModal = function() {
-                $scope.modal.hide();
-              };
-
-              $scope.$on('$destroy', function() {
-                $scope.modal.remove();
-              });
+            $scope.$on('$destroy', function() {
+            $scope.modal.remove();
+            });
 
         }])
     .controller('AccountCtrl', [
