@@ -42,13 +42,13 @@ angular.module('app.controllers', [])
         '$state', '$scope', 'UserService', '$ionicModal', '$compile',   // <-- controller dependencies
         function ($state, $scope, UserService, $ionicModal, $compile) {
 
-
             var posts = angular.element( document.querySelector('#posts') );
-            var postArray = [];
 
             refresh();
         
             function refresh(){
+
+                var postArray = [];
 
                 post = Parse.Object.extend("Post");
                 var query = new Parse.Query(post);
@@ -60,11 +60,13 @@ angular.module('app.controllers', [])
                         for(var i=0, len=results.length; i<len; i++) {
                             var post = results[i];
                             var id = post.id;
+                            var name = post.get('Name');
                             var time = post.get('Time');
                             var desc = post.get('Description');
 
                             var json = {
                                 "id": id,
+                                "name": name,
                                 "time": time,
                                 "desc": desc
                             };
@@ -107,16 +109,21 @@ angular.module('app.controllers', [])
             $scope.modal.show()
             };
 
-            $scope.openModal1 = function(x) {      
+            $scope.openModal1 = function(user) {      
 
-                $scope.contact.name = x.id;
-                $scope.contact.info = x.desc;
+                $scope.contact.name = user.name;
+                $scope.contact.info = user.desc;
 
                 $scope.modal.show()
             };
 
             $scope.closeModal = function() {
-            $scope.modal.hide();
+                $scope.modal.hide();
+            };
+
+            $scope.respondModal = function() {
+                $scope.modal.hide();
+                $state.go('tab.notification');
             };
 
             $scope.$on('$destroy', function() {

@@ -91,6 +91,7 @@ angular.module('user.services', [])
                     var Post = Parse.Object.extend("Post");
                     var p = new Post();
 
+                    p.set("Name", _postParams.pName);
                     p.set("Time", _postParams.postTime);
                     p.set("Description", _postParams.desc);
 
