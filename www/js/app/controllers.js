@@ -24,13 +24,66 @@ angular.module('app.controllers', [])
                 });
             };
         }])
+    .controller('NotificationCtrl', [
+        '$state', '$scope', 'UserService',   // <-- controller dependencies
+        function ($state, $scope, UserService) {
+
+            var notes = angular.element( document.querySelector('#notes') );
+
+            refresh();
+        
+            function refresh(){
+
+                var noteArray = [];
+
+                note = Parse.Object.extend("Note");
+                var query = new Parse.Query(post);
+
+                query.find({
+                    success:function(results) {
+                        notes.empty();
+                        console.dir(results);
+                        for(var i=0, len=results.length; i<len; i++) {
+                            var note = results[i];
+                            var createId = note.get('Message');
+                            var name = note.get('Name');
+                            var desc = note.get('Description');
+
+                            var time = new Date();
+                            time = note.get('Time');
+                            var hour = time.getHours();
+                            var min = time.getMinutes();
+
+                            var json = {
+                                "createId": createId,
+                                "name": name,
+                                "hour": hour,
+                                "min": min,
+                                "desc": desc
+                            };
+
+                            postArray.push(json);
+
+                        }
+
+                        $scope.noteList = postArray;
+
+                    },
+                    error:function(error) {
+                        alert("Error when getting posts!");
+                    }
+                });
+
+            };
+
+        }])
     .controller('CreateCtrl', [
         '$state', '$scope', 'UserService',   // <-- controller dependencies
         function ($state, $scope, UserService) {
 
             $scope.post = {};
 
-            $scope.doCreateAction = function() {
+            $scope.doCreatePostAction = function() {
 
 
                 UserService.init();
@@ -70,15 +123,20 @@ angular.module('app.controllers', [])
                         console.dir(results);
                         for(var i=0, len=results.length; i<len; i++) {
                             var post = results[i];
-                            var id = post.id;
+                            var createId = post.get('Creator');
                             var name = post.get('Name');
-                            var time = post.get('Time');
                             var desc = post.get('Description');
 
+                            var time = new Date();
+                            time = post.get('Time');
+                            var hour = time.getHours();
+                            var min = time.getMinutes();
+
                             var json = {
-                                "id": id,
+                                "createId": createId,
                                 "name": name,
-                                "time": time,
+                                "hour": hour,
+                                "min": min,
                                 "desc": desc
                             };
 
@@ -95,6 +153,19 @@ angular.module('app.controllers', [])
                 });
 
             };
+
+            $scope.note = {
+                receiver: '',
+                receiverName: ''
+            };
+
+            $scope.doCreateNoteAction = function(note) {
+
+                UserService.init();
+
+                UserService.createNote(note);
+            };
+
             
             $scope.doRefreshAction = function() {
                 refresh();
@@ -106,7 +177,8 @@ angular.module('app.controllers', [])
 
             $scope.contact = {
                 name: 'id',
-                info: 'Tap anywhere on the card to open the modal'
+                info: 'Tap anywhere on the card to open the modal',
+                createId: ''
             }
 
             $ionicModal.fromTemplateUrl('contact-modal.html', {
@@ -125,6 +197,12 @@ angular.module('app.controllers', [])
                 $scope.contact.name = user.name;
                 $scope.contact.info = user.desc;
 
+                $scope.contact.createId = user.createId;
+
+                $scope.note.receiver = user.createId;
+
+                $scope.note.receiverName = user.name;
+
                 $scope.modal.show()
             };
 
@@ -133,6 +211,7 @@ angular.module('app.controllers', [])
             };
 
             $scope.respondModal = function() {
+                alert($scope.contact.createId);
                 $scope.modal.hide();
                 $state.go('tab.notification');
             };

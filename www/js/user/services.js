@@ -40,8 +40,7 @@ angular.module('user.services', [])
                     user.set("username", _userParams.email);
                     user.set("password", _userParams.password);
                     user.set("email", _userParams.email);
-                    user.set("first_name", _userParams.first_name);
-                    user.set("last_name", _userParams.last_name);
+                    user.set("name", _userParams.name);
 
                     // should return a promise
                     return user.signUp(null, {});
@@ -90,12 +89,61 @@ angular.module('user.services', [])
 
                     var Post = Parse.Object.extend("Post");
                     var p = new Post();
+                    var name;
 
-                    p.set("Name", _postParams.pName);
-                    p.set("Time", _postParams.postTime);
-                    p.set("Description", _postParams.desc);
+                    Parse.User.current().fetch().then(function (user) {
+                        name = user.get('name');
+                    });
+
+                    alert("Creating Post");
+
+                    var hour = _postParams.postHour
+
+                    var now = new Date();
+                    var later = new Date(now.getTime() + (hour*1000*60*60));
+
+                    
+                    p.set("Time", later);
+                    p.set("Description", _postParams.postDesc);
+                    p.set("Creator", Parse.User.current().id);
+                    p.set("Name", name);
+                    
 
                     p.save(null, {
+                      success: function(p) {
+                        // Execute any logic that should take place after the object is saved.
+                        // alert('New object created with objectId: ' + p.id);
+                      },
+                      error: function(p, error) {
+                        // Execute any logic that should take place if the save fails.
+                        // error is a Parse.Error with an error code and message.
+                        alert('Failed to create new object, with error code: ' + error.message);
+                      }
+                    });
+
+                },
+
+
+                createNote: function(_noteParams) {
+
+                    var Note = Parse.Object.extend("Note");
+                    var n = new Note();
+
+                    var name;
+                    Parse.User.current().fetch().then(function (user) {
+                        name = user.get('name');
+                    });
+
+                    alert("Sending Notification");
+
+                    //n.set("Sender", _noteParams.noteSender);
+                    n.set("Sender", Parse.User.current().id);
+                    n.set("senderName", name);
+                    n.set("Receiver", _noteParams.receiver);
+                    n.set("receiverName", _noteParams.receiverName);
+                    n.set("Message", _noteParams.noteMessage);
+
+                    n.save(null, {
                       success: function(p) {
                         // Execute any logic that should take place after the object is saved.
                         // alert('New object created with objectId: ' + p.id);

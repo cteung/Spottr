@@ -113,7 +113,7 @@ angular.module('starter',
                 views: {
                     'tab-notification': {
                         templateUrl: 'templates/tab-notification.html',
-                        //controller: 'HomeCtrl'
+                        controller: 'NotificationCtrl'
                     }
                 }
             })

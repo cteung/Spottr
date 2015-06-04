@@ -27,16 +27,12 @@
         <form>
             <ion-list>
                 <label class="item item-input">
-                    <span class="input-label">Name</span>
-                    <input id="pName" type="text" placeholder="Name"  ng-model="post.pName">
-                </label>
-                <label class="item item-input">
                     <span class="input-label">Time</span>
-                    <input id="postTime" type="text" placeholder="Time"  ng-model="post.postTime">
+                    <input id="postTime" type="integer" placeholder="Hour" ng-model="post.postHour">
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Description</span>
-                    <input id="postDesc" type="text" placeholder="Description" ng-model="post.desc">
+                    <input id="postDesc" type="text" placeholder="Description" ng-model="post.postDesc">
                 </label>
 
                 <!--
@@ -51,7 +47,7 @@
             -->
             </ion-list>
             <button class="button button-stable button-block"
-                    ng-click="doCreateAction()">Post</button>
+                    ng-click="doCreatePostAction()">Post</button>
         </form>
     </ion-content>
 </ion-view>
